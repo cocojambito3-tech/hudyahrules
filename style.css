@@ -200,12 +200,52 @@ body::after {
 }
 
 @media (max-width: 480px) {
-    .admins { flex-direction: column; align-items: center; gap: 20px; }
-    .admin-info { position: static; transform: none; opacity: 0; display: none; margin-top: 10px; }
-    .admin.active-mobile { height: auto; border-radius: 15px; width: 180px; border-color: #444; }
-    .admin.active-mobile img { width: 80px; height: 80px; margin: 10px auto; display: block; filter: grayscale(0%); }
-    .admin.active-mobile .admin-info { opacity: 1; display: block; width: 100%; }
+    /* Выстраиваем в ряд и разрешаем перенос, если не влезут */
+    .admins { 
+        flex-direction: row; 
+        justify-content: center; 
+        gap: 15px; /* Уменьшаем расстояние, чтобы влезли в ряд */
+        flex-wrap: wrap; 
+    }
+
+    /* Уменьшаем размер самих кружков для мобилок */
+    .admin { 
+        width: 70px; 
+        height: 70px; 
+    }
+
+    /* Логика активной карточки (при клике) */
+    .admin.active-mobile { 
+        width: 140px; /* Немного уменьшил, чтобы не ломало верстку */
+        height: auto; 
+        border-radius: 15px; 
+        border-color: #444; 
+    }
+
+    .admin.active-mobile img { 
+        width: 60px; 
+        height: 60px; 
+        margin: 10px auto; 
+        display: block; 
+        filter: grayscale(0%); 
+    }
+
+    .admin-info { 
+        position: static; 
+        transform: none; 
+        opacity: 0; 
+        display: none; 
+        margin-top: 5px; 
+        width: 100%;
+        background: transparent; /* Убираем фон, так как он внутри карточки */
+    }
+
+    .admin.active-mobile .admin-info { 
+        opacity: 1; 
+        display: block; 
+    }
 }
+
 
 
 
