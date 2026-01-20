@@ -200,49 +200,54 @@ body::after {
 }
 
 @media (max-width: 480px) {
-    /* Выстраиваем в ряд и разрешаем перенос, если не влезут */
-    .admins { 
-        flex-direction: row; 
-        justify-content: center; 
-        gap: 15px; /* Уменьшаем расстояние, чтобы влезли в ряд */
-        flex-wrap: wrap; 
+    /* Контейнер: заставляем стоять в ряд и центруем */
+    .admins {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important; /* Запрещаем перенос на вторую строку */
+        justify-content: center !important;
+        gap: 10px !important; /* Минимальный отступ между кружками */
+        margin-bottom: 50px !important;
     }
 
-    /* Уменьшаем размер самих кружков для мобилок */
-    .admin { 
-        width: 70px; 
-        height: 70px; 
+    /* Сами иконки: делаем их меньше, чтобы влезли 4 штуки в ширину экрана */
+    .admin {
+        width: 75px !important;
+        height: 75px !important;
+        flex-shrink: 0; /* Не даем им сплющиваться */
     }
 
-    /* Логика активной карточки (при клике) */
-    .admin.active-mobile { 
-        width: 140px; /* Немного уменьшил, чтобы не ломало верстку */
-        height: auto; 
-        border-radius: 15px; 
-        border-color: #444; 
+    /* Текст под иконкой: на мобилках делаем его абсолютно позиционированным, 
+       чтобы при клике он не раздвигал соседей и не ломал ряд */
+    .admin-info {
+        position: absolute !important;
+        left: 50% !important;
+        bottom: -85px !important; /* Выносим текст вниз под иконку */
+        transform: translateX(-50%) !important;
+        width: 140px !important;
+        z-index: 100 !important;
+        display: block !important; /* Показываем блок */
+        opacity: 0 !important; /* Но делаем невидимым */
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0.95) !important;
+        border: 1px solid #333;
     }
 
-    .admin.active-mobile img { 
-        width: 60px; 
-        height: 60px; 
-        margin: 10px auto; 
-        display: block; 
-        filter: grayscale(0%); 
+    /* Когда нажали на иконку — показываем инфу */
+    .admin.active-mobile {
+        border-color: #fff !important;
+        transform: scale(1.1);
     }
 
-    .admin-info { 
-        position: static; 
-        transform: none; 
-        opacity: 0; 
-        display: none; 
-        margin-top: 5px; 
-        width: 100%;
-        background: transparent; /* Убираем фон, так как он внутри карточки */
+    .admin.active-mobile .admin-info {
+        opacity: 1 !important;
     }
 
-    .admin.active-mobile .admin-info { 
-        opacity: 1; 
-        display: block; 
+    /* Отключаем старую логику смены размеров карточки, которая была в твоем коде */
+    .admin.active-mobile img {
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        border-radius: 50% !important;
     }
 }
 
