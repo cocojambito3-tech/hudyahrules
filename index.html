@@ -11,247 +11,15 @@
     <link rel="preload" as="image" href="POLINA.jpg">
     <link rel="preload" as="image" href="symbol.jpg">
     
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            color: #e5e5e5;
-            background: #000;
-            overflow-x: hidden;
-        }
-
-        /* ЭФФЕКТ СКАН-ЛИНИЙ (CRT) */
-        .scanlines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.15) 50%
-            ), linear-gradient(
-                90deg, 
-                rgba(255, 0, 0, 0.03), 
-                rgba(0, 255, 0, 0.01), 
-                rgba(0, 0, 255, 0.03)
-            );
-            background-size: 100% 3px, 3px 100%;
-            z-index: 20;
-            pointer-events: none;
-        }
-
-        /* ВИНЬЕТКА */
-        .vignette {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 120%);
-            z-index: 21;
-            pointer-events: none;
-        }
-
-        /* СКРОЛЛБАР */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-
-        /* ПЕПЕЛ */
-        #ashCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        /* ИНТРО */
-        .intro-content {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 1s ease-out forwards;
-        }
-
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ФОН (ОРИГИНАЛ) */
-        body::before {
-            content: "∀̸   ∀̸   ∀̸   ∀̸   ∀̸";
-            position: fixed;
-            inset: -50%;
-            font-size: 100px;
-            color: rgba(255,255,255,0.02);
-            transform: rotate(-20deg);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        body::after {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(circle at center, rgba(0,0,0,0.4), rgba(0,0,0,0.95)),
-                url("symbol.jpg") center/contain no-repeat;
-            animation: breathe 18s ease-in-out infinite;
-            filter: grayscale(100%) contrast(120%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes breathe {
-            0% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.08); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.9; }
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 50px 20px;
-            position: relative;
-            z-index: 5;
-        }
-
-        .logo {
-            text-align: center;
-            letter-spacing: 8px;
-            font-size: 44px;
-            margin-bottom: 60px;
-            color: #fff;
-            text-shadow: 0 0 15px rgba(255,255,255,0.1);
-        }
-
-        .admins {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
-            margin-bottom: 100px;
-        }
-
-        .admin {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: #0f0f0f;
-            border: 2px solid #222;
-            text-decoration: none;
-            color: inherit;
-            transition: 0.4s;
-            position: relative;
-            z-index: 25;
-        }
-
-        .admin:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 0 40px rgba(255,255,255,0.1);
-        }
-
-        .admin img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            filter: grayscale(100%);
-            transition: 0.3s;
-            object-fit: cover;
-        }
-
-        .admin:hover img { filter: grayscale(0%); }
-
-        .admin-info {
-            position: absolute;
-            bottom: -95px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 180px;
-            background: rgba(0,0,0,0.9);
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 14px;
-            opacity: 0;
-            transition: 0.3s;
-            pointer-events: none;
-        }
-
-        .admin:hover .admin-info { opacity: 1; }
-
-        .rules {
-            background: rgba(5,5,5,0.85);
-            border: 1px solid #222;
-            border-radius: 14px;
-            padding: 35px;
-            line-height: 1.7;
-            box-shadow: 0 0 60px rgba(0,0,0,0.9);
-            position: relative; /* ВАЖНО для глаза */
-            overflow: hidden; /* Чтобы глаз не вылезал за границы */
-        }
-
-        .rules h2 { text-align: center; letter-spacing: 3px; margin-bottom: 25px; }
-        .rules p { color: #ccc; }
-        .rules li { margin-bottom: 10px; }
-
-        .warning {
-            margin-top: 25px;
-            border-top: 1px solid #222;
-            padding-top: 15px;
-            font-size: 14px;
-            opacity: 0.8;
-        }
-
-        /* ГЛАЗ */
-        .mystic-eye {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            pointer-events: none;
-            opacity: 0;
-            filter: grayscale(100%) brightness(0.7);
-            z-index: 2;
-        }
-
-        @keyframes eye-blink {
-            0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
-            20% { opacity: 0.5; transform: scale(1) rotate(0deg); }
-            80% { opacity: 0.5; transform: scale(1) rotate(0deg); }
-            100% { opacity: 0; transform: scale(0.8) rotate(10deg); }
-        }
-
-        .eye-active {
-            animation: eye-blink 4s forwards;
-        }
-
-        @media (max-width: 768px) {
-            .logo { font-size: 28px; }
-            .admin { width: 90px; height: 90px; }
-        }
-
-        @media (max-width: 480px) {
-            .admins { flex-direction: column; align-items: center; gap: 20px; }
-            .admin-info { position: static; transform: none; opacity: 0; display: none; margin-top: 10px; }
-            .admin.active-mobile { height: auto; border-radius: 15px; width: 180px; border-color: #444; }
-            .admin.active-mobile img { width: 80px; height: 80px; margin: 10px auto; display: block; filter: grayscale(0%); }
-            .admin.active-mobile .admin-info { opacity: 1; display: block; width: 100%; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="scanlines"></div>
 <div class="vignette"></div>
 
-<audio id="hoverSound" src="https://perforated.ru/files/beep.mp3" preload="auto"></audio>
+<audio id="hoverSound" src="https:// perforated.ru/files/beep.mp3" preload="auto"></audio>
+<audio id="uiClick" src="https://www.fesliyanstudios.com/play-mp3/6511" preload="auto"></audio>
 
 <canvas id="ashCanvas"></canvas>
 
@@ -297,7 +65,7 @@
         </a>
     </div>
 
-    <div class="rules" id="rulesBlock">
+    <div class="rules">
         <h2>ПРАВИЛА ЧАТА</h2>
         <p>При заходе в чат, вы автоматически принимаете правила ниже и обязуетесь их соблюдать. Не знание правил не освобождает от ответственности.</p>
         <p><strong>Нарушения, за которые вы можете получить перманентный бан:</strong></p>
@@ -316,18 +84,16 @@
     </div>
 </div>
 
+
+
 <script>
-/* ЗВУКИ */
-const sound = document.getElementById('hoverSound');
-const adminLinks = document.querySelectorAll('.js-admin');
+
 
 adminLinks.forEach(link => {
     link.addEventListener('mouseenter', () => {
-        if (sound) {
-            sound.currentTime = 0;
-            sound.volume = 0.15;
-            sound.play().catch(() => {});
-        }
+        sound.currentTime = 0;
+        sound.volume = 0.15; // Тихий звук
+        sound.play().catch(() => {}); // Игнорим ошибку, если юзер еще не кликнул по странице
     });
 });
 
@@ -336,14 +102,8 @@ const canvas = document.getElementById('ashCanvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
 const mouse = { x: -100, y: -100 };
-
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resize);
-resize();
-
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
 window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
 
 class Particle {
@@ -377,14 +137,15 @@ function animate() {
 animate();
 
 /* ДВОЙНОЙ КЛИК МОБИЛКИ */
-adminLinks.forEach(card => {
+const adminCards = document.querySelectorAll('.js-admin');
+adminCards.forEach(card => {
     let clickCount = 0;
     card.addEventListener('click', function(e) {
         if (window.innerWidth <= 480) {
             clickCount++;
             if (clickCount === 1) {
                 e.preventDefault();
-                adminLinks.forEach(c => c.classList.remove('active-mobile'));
+                adminCards.forEach(c => c.classList.remove('active-mobile'));
                 this.classList.add('active-mobile');
                 setTimeout(() => { clickCount = 0; }, 4000);
             }
@@ -392,40 +153,7 @@ adminLinks.forEach(card => {
     });
 });
 
-/* ЛОГИКА ГЛАЗА */
-const rulesBlock = document.getElementById('rulesBlock');
 
-function spawnEye() {
-    const eye = document.createElement('div');
-    eye.className = 'mystic-eye';
-    eye.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="white" stroke-width="1.5"/>
-            <circle cx="12" cy="12" r="3" fill="white"/>
-        </svg>
-    `;
-
-    // Случайная позиция внутри правил
-    const x = Math.random() * (rulesBlock.offsetWidth - 50);
-    const y = Math.random() * (rulesBlock.offsetHeight - 50);
-
-    eye.style.left = x + 'px';
-    eye.style.top = y + 'px';
-
-    rulesBlock.appendChild(eye);
-
-    setTimeout(() => eye.classList.add('eye-active'), 50);
-    setTimeout(() => eye.remove(), 4500);
-}
-
-function eyeLoop() {
-    const delay = Math.random() * (10000 - 5000) + 5000;
-    setTimeout(() => {
-        spawnEye();
-        eyeLoop();
-    }, delay);
-}
-eyeLoop();
 
 </script>
 </body>
